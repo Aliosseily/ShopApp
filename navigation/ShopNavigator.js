@@ -7,6 +7,7 @@ import ProductDetailScreen from '../screens/shop/ProductDetailScreen';
 import CartScreen from '../screens/shop/CartScreen';
 import OrdersScreen from '../screens/shop/OrdersScreen';
 import UserProductScreen from '../screens/user/UserProductsScreen'
+import EditProductScreen from '../screens/user/EditProductScreen'
 //https://www.npmjs.com/package/react-navigation-drawer
 import { createDrawerNavigator } from 'react-navigation-drawer';
 import Colors from '../constants/Colors'; 
@@ -51,7 +52,8 @@ const OrdersNavigator = createStackNavigator({
 })
 
 const AdminNavigator = createStackNavigator({
-    UserProducts : UserProductScreen
+    UserProducts : UserProductScreen,
+    EditProduct : EditProductScreen
 },{
     navigationOptions:{
         drawerIcon : drawerConfig => (

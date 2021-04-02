@@ -1,4 +1,4 @@
-import React ,{useState} from 'react';
+import React ,{useState , useEffect, useCallback} from 'react';
 import { View, Text, ScrollView, TextInput, StyleSheet, Platform } from 'react-native';
 import { HeaderButtons, Item } from "react-navigation-header-buttons";
 import HeaderButton from '../../components/UI/HeaderButton';
@@ -13,8 +13,15 @@ const EditProductScreen = props => {
     // price unchangable
     const [price , setPrice] = useState('');
     const [description , setDescription] = useState(editedProduct ? editedProduct.description : '');
-
-
+    // useCallback insures that this function isn't recreated every time the component re-renders and therefor to avoid entering an infinite loop
+    // we should add empty array as depedency to avoid recreating function after every time the component re-renders
+    const submithandler = useCallback(() =>{
+        console.log("Submitting!")
+    },[]);
+    // useEffect used to execute a function after every render cycle
+    useEffect(() => {
+        props.navigation.setParams({submit:submithandler})
+    },[submithandler])
     return (
         <ScrollView>
             <View style={styles.form}>
@@ -43,6 +50,7 @@ const EditProductScreen = props => {
 }
 
 EditProductScreen.navigationOptions = navData => {
+    const submitFn = navData.navigation.getParam('submit') 
     return {
         headerTitle:navData.navigation.getParam('productId') 
         ? 'Edit Product'
@@ -51,9 +59,7 @@ EditProductScreen.navigationOptions = navData => {
                 <Item
                     title='Add'
                     iconName={Platform.OS === 'android' ? 'md-checkmark' : 'ios-checkmark'}
-                    onPress={() => {
-                        navData.navigation.navigate('EditProduct');
-                    }}
+                    onPress={submitFn}
                 />
             </HeaderButtons>,
     }

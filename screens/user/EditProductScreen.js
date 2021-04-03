@@ -34,7 +34,7 @@ const EditProductScreen = props => {
             dispatch(productActions.createProduct(title, description, imageUrl, +price))
         }
         props.navigation.goBack();
-    }, [dispatch, prodId, title, description, imageUrl, price]);// dependencies when changed fire submithandler function 
+    }, [dispatch, prodId, title, description, imageUrl, price,titleIsValid]);// dependencies when changed fire submithandler function 
     // useEffect used to execute a function after every render cycle
     useEffect(() => {
         props.navigation.setParams({ submit: submithandler })

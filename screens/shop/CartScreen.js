@@ -5,6 +5,7 @@ import Colors from '../../constants/Colors';
 import CartItem from '../../components/shop/CartItem';
 import * as cartActions from '../../store/actions/cart';
 import * as orderActions from '../../store/actions/order';
+import Card from '../../components/UI/Card'
 const CartScreen = props => {
     const cartTotalAmount = useSelector(state => state.cart.totalAmount);
     const cartItems = useSelector(state => {
@@ -25,7 +26,7 @@ const CartScreen = props => {
     const dispatch = useDispatch();
 return(
 <View style={styles.screen}>
-    <View style={styles.summary} >
+    <Card style={styles.summary} >
         {/* to insure that you never get value with minus */}
         <Text style={styles.summaryText}>Total: <Text style={styles.amount}>${Math.round(cartTotalAmount.toFixed(2) * 100 )/ 100}</Text></Text>
         <Button
@@ -36,7 +37,7 @@ return(
              dispatch(orderActions.addOrder(cartItems,cartTotalAmount))
          }}
          />
-    </View>
+    </Card>
 <FlatList
 data={cartItems}
 keyExtractor={item => item.productId}
@@ -66,13 +67,6 @@ alignItems:'center',
 justifyContent:'space-between',
 marginBottom:20,
 padding:10,
-shadowColor:'black',
-shadowOpacity:0.2,
-shadowOffset:{width:0 , height:2},
-shadowRadius:8,
-elevation:5,
-borderRadius:10,
-backgroundColor:'white',
 },
 summaryText:{
     fontSize:18,

@@ -1,6 +1,5 @@
 import React from 'react'
 import {View, Text, Image, StyleSheet, Button , TouchableOpacity, TouchableNativeFeedback,Platform} from 'react-native'
-import Colors  from '../../constants/Colors';
 import Card from '../UI/Card'
 const ProductItem = props => {
     let TouchableCmp = Platform.OS === 'android' && Platform.Version > 21 ? TouchableNativeFeedback : TouchableOpacity;
@@ -48,7 +47,9 @@ const styles = StyleSheet.create({
     },
     title:{
         fontSize:18,
-        marginVertical:4
+        marginVertical:4,
+        fontFamily:'open-sans-bold'
+
     },
     price:{
         fontSize:14,

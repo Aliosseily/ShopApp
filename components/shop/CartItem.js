@@ -31,18 +31,18 @@ const styles = StyleSheet.create({
       alignItems:'center',
   },
   quantity:{
-   //fontFamily:'open-sans'
+   fontFamily:'open-sans',
    color:'#888',
    fontSize:16
   },
   mainText:{
-    //fontFamily:'open-sans'
+    fontFamily:'open-sans-bold',
     color:'black',
     fontSize:16
    },
   title:{
       fontSize:16,
-    //   fontFamily:'open-sans-bold'
+      fontFamily:'open-sans-bold'
   },
   deleteButton:{
       marginLeft:20

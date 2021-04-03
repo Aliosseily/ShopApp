@@ -70,6 +70,8 @@ padding:10,
 },
 summaryText:{
     fontSize:18,
+    fontFamily:'open-sans-bold',
+
 },
 amount:{
     color:Colors.primary

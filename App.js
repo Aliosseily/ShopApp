@@ -1,5 +1,4 @@
 import React, { useState } from 'react';
-import { StyleSheet, Text, View } from 'react-native';
 import { createStore, combineReducers } from 'redux';
 import { Provider } from 'react-redux';
 import productsReducer from './store/reducers/products';
@@ -8,6 +7,7 @@ import ordersReducer from './store/reducers/order';
 import ShopNavigator from './navigation/ShopNavigator';
 import *  as Font from 'expo-font'
 import AppLoading from 'expo-app-loading';
+
 //import { composeWithDevTools } from 'redux-devtools-extension'; // use this only while development 
 
 const rootReducer = combineReducers({
@@ -24,6 +24,8 @@ const store = createStore(rootReducer);
    })
  }
 export default function App() {
+  // to remove warnings from app
+  console.disableYellowBox = true;
    const [fontLoaded , setFontLoaded] = useState(false);
 
    if(!fontLoaded){

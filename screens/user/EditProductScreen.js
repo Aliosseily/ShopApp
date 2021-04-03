@@ -14,6 +14,8 @@ const EditProductScreen = props => {
     // price unchangable
     const [price , setPrice] = useState('');
     const [description , setDescription] = useState(editedProduct ? editedProduct.description : '');
+
+
     // useCallback insures that this function isn't recreated every time the component re-renders and therefor to avoid entering an infinite loop
     // we should add empty array as depedency to avoid recreating function after every time the component re-renders
     const submithandler = useCallback(() =>{

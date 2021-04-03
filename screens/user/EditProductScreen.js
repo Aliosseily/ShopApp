@@ -2,12 +2,13 @@ import React ,{useState , useEffect, useCallback} from 'react';
 import { View, Text, ScrollView, TextInput, StyleSheet, Platform } from 'react-native';
 import { HeaderButtons, Item } from "react-navigation-header-buttons";
 import HeaderButton from '../../components/UI/HeaderButton';
-import {useSelector} from 'react-redux';
+import {useSelector , useDispatch } from 'react-redux';
+import * as productActions from '../../store/actions/products'
 const EditProductScreen = props => {
-
+    
     const prodId = props.navigation.getParam('productId') 
     const editedProduct = useSelector(state => state.products.userProducts.find(prod => prod.id === prodId));
-
+    const dispatch = useDispatch();
     const [title , setTitle] = useState(editedProduct ? editedProduct.title : '');
     const [imageUrl , setImageUrl] = useState(editedProduct ? editedProduct.imageUrl : '');
     // price unchangable
@@ -16,8 +17,14 @@ const EditProductScreen = props => {
     // useCallback insures that this function isn't recreated every time the component re-renders and therefor to avoid entering an infinite loop
     // we should add empty array as depedency to avoid recreating function after every time the component re-renders
     const submithandler = useCallback(() =>{
-        console.log("Submitting!")
-    },[]);
+        // editedProduct found the we are eeiting 
+        if(editedProduct){
+          dispatch(productActions.updateProduct(prodId,title,description,imageUrl))
+        }
+        else{
+            dispatch(productActions.createProduct(title,description,imageUrl,+price))
+        }
+    },[dispatch,prodId,title,description,imageUrl,price]);// dependencies when changed fire submithandler function 
     // useEffect used to execute a function after every render cycle
     useEffect(() => {
         props.navigation.setParams({submit:submithandler})

@@ -9,6 +9,7 @@ import HeaderButton from '../../components/UI/HeaderButton'
 import Colors from '../../constants/Colors'
 const ProductsOverviewScreen = props => {
     const [isLoading, setIsLoading] = useState(false);
+    const [isRefreshing, setIsRefreshing] = useState(false);
     const [error, setError] = useState();
     const Products = useSelector(state => state.products.availableProducts);
     const dispatch = useDispatch();
@@ -16,13 +17,16 @@ const ProductsOverviewScreen = props => {
 
     const loadProducts = useCallback(async () => {
         setError(null);
-        setIsLoading(true);
+        setIsRefreshing(true);
+        // setIsLoading(true); remove it from here because of refreshing 
         try {
             await dispatch(productActions.fetchProducts())
         } catch (err) {
             setError(err.message)
         }
-        setIsLoading(false);
+        setIsRefreshing(false);
+
+        // setIsLoading(false);
 
     },[dispatch,setIsLoading,setError]);
 
@@ -35,7 +39,10 @@ const ProductsOverviewScreen = props => {
      },[loadProducts])
     // fire this whenever this component loads
     useEffect(() => {
-        loadProducts();
+        setIsLoading(true)
+        loadProducts().then(()=>{
+            setIsLoading(false)
+        });
     }, [dispatch,loadProducts])
 
     const selectItemHandler = (id, title) => {
@@ -68,7 +75,9 @@ const ProductsOverviewScreen = props => {
     }
 
     return <FlatList
+    onRefresh={loadProducts}
         data={Products}
+        refreshing={isRefreshing}
         keyExtractor={item => item.id}
         renderItem={itemData =>
             <ProductItem

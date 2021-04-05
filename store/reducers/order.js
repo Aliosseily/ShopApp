@@ -1,5 +1,5 @@
 import Order from "../../models/order";
-import { ADD_ORDER } from "../actions/order";
+import { ADD_ORDER, SET_ORDERS } from "../actions/order";
 
 const initialState = {
     orders: []
@@ -7,6 +7,10 @@ const initialState = {
 
 export default (state = initialState, action) => {
     switch (action.type) {
+        case SET_ORDERS:
+            return{
+                orders:action.orders
+            }
         case ADD_ORDER:
             //new Date.toString() generate uniqu id
             const newOrder = new Order(

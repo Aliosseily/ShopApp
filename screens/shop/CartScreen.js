@@ -1,5 +1,5 @@
-import React from 'react';
-import {View, Text, FlatList, Button, StyleSheet} from 'react-native';
+import React, {useState} from 'react';
+import {View, Text, FlatList, Button, StyleSheet,ActivityIndicator} from 'react-native';
 import {useSelector,useDispatch} from 'react-redux';
 import Colors from '../../constants/Colors';
 import CartItem from '../../components/shop/CartItem';
@@ -7,6 +7,7 @@ import * as cartActions from '../../store/actions/cart';
 import * as orderActions from '../../store/actions/order';
 import Card from '../../components/UI/Card'
 const CartScreen = props => {
+    const [isLoading, setIsLosding] = useState(false);
     const cartTotalAmount = useSelector(state => state.cart.totalAmount);
     const cartItems = useSelector(state => {
         const transformedCartItems = [];
@@ -24,19 +25,27 @@ const CartScreen = props => {
     });
 
     const dispatch = useDispatch();
+
+       const sendOrderHandler = async () => {
+           setIsLosding(true)
+           await dispatch(orderActions.addOrder(cartItems,cartTotalAmount))
+           setIsLosding(false)       
+       }
+
+
 return(
 <View style={styles.screen}>
     <Card style={styles.summary} >
         {/* to insure that you never get value with minus */}
         <Text style={styles.summaryText}>Total: <Text style={styles.amount}>${Math.round(cartTotalAmount.toFixed(2) * 100 )/ 100}</Text></Text>
-        <Button
-         color={Colors.accent} 
-         title="Order Now" 
-         disabled={cartItems.length === 0}
-         onPress={() => {
-             dispatch(orderActions.addOrder(cartItems,cartTotalAmount))
-         }}
-         />
+     {isLoading? <ActivityIndicator size='small' color={Colors.primary} /> :
+      <Button
+      color={Colors.accent} 
+      title="Order Now" 
+      disabled={cartItems.length === 0}
+      onPress={sendOrderHandler}
+      /> }
+
     </Card>
 <FlatList
 data={cartItems}
@@ -75,6 +84,11 @@ summaryText:{
 },
 amount:{
     color:Colors.primary
+},
+centered:{
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center'
 }
 })
 

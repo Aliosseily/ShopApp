@@ -1,5 +1,5 @@
-import React , {useEffect} from 'react';
-import { FlatList, Button, Platform } from 'react-native'
+import React, { useState, useEffect } from 'react';
+import { FlatList, Button, Platform, View, ActivityIndicator, StyleSheet } from 'react-native'
 import { useSelector, useDispatch } from 'react-redux'
 import ProductItem from '../../components/shop/ProductItem'
 import * as cartActions from '../../store/actions/cart'
@@ -8,13 +8,20 @@ import { HeaderButtons, Item } from "react-navigation-header-buttons";
 import HeaderButton from '../../components/UI/HeaderButton'
 import Colors from '../../constants/Colors'
 const ProductsOverviewScreen = props => {
+    const [isLoading, setIsLoading] = useState(false);
     const Products = useSelector(state => state.products.availableProducts);
     const dispatch = useDispatch();
 
     // fire this whenever this component loads
     useEffect(() => {
-    dispatch(productActions.fetchProducts())
-    },[dispatch])
+        const loadProducts = async ()=>{
+            setIsLoading(true);
+            await dispatch(productActions.fetchProducts())
+            setIsLoading(false);
+
+        };
+        loadProducts();
+    }, [dispatch])
 
     const selectItemHandler = (id, title) => {
         // props.navigation.navigate('ProductDetail')
@@ -25,7 +32,12 @@ const ProductsOverviewScreen = props => {
             }
         )
     }
-
+     
+    if(isLoading){
+        return <View style={styles.centered}>
+        <ActivityIndicator size='large' color={Colors.primary}/>
+        </View>
+    }
 
     return <FlatList
         data={Products}
@@ -74,4 +86,12 @@ ProductsOverviewScreen.navigationOptions = navData => {
         </HeaderButtons>
     }
 }
+
+const styles = StyleSheet.create({
+    centered:{
+      flex:1,
+      justifyContent:'center',
+      alignItems:'center'
+    }
+})
 export default ProductsOverviewScreen;

@@ -66,7 +66,7 @@ export const createProduct = (title, description, imageUrl, price) => {
     return async dispatch => {
         // add any async code you want
         //firebase will add folder products.js
-        const respone = await fetch('https://shopapp-803cc-default-rtdb.firebaseio.com/products.json', {
+        const response = await fetch('https://shopapp-803cc-default-rtdb.firebaseio.com/products.json', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({//convert object to json
@@ -76,7 +76,7 @@ export const createProduct = (title, description, imageUrl, price) => {
                 price
             })
         })
-        const redData = await respone.json();
+        const redData = await response.json();
         return ({
             type: CREATE_PRODUCT,
             productData: {

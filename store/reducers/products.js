@@ -9,11 +9,11 @@ const initialState = {
 
 export default (state = initialState, action) => {
     switch (action.type) {
-case SET_PRODUCTS:
-    return{
-        availableProducts : action.products,
-        userProducts : action.products.filter(prod => prod.ownerId === 'u1')
-    }
+        case SET_PRODUCTS:
+            return {
+                availableProducts: action.products,
+                userProducts: action.products.filter(prod => prod.ownerId === 'u1')
+            }
         case CREATE_PRODUCT:
             //new Date().toString() to create unique dummy id
             const newProduct = new Product(
@@ -49,10 +49,10 @@ case SET_PRODUCTS:
             const availableProductIndex = state.availableProducts.findIndex(prod => prod.id === action.pid);
             const updatedAvailableProducts = [...state.availableProducts];
             updatedAvailableProducts[availableProductIndex] = updatedProduct // replaced by updatedProduct
-            return{
+            return {
                 ...state,
-                availableProducts :updatedAvailableProducts,
-                userProducts : updatedUserProducts
+                availableProducts: updatedAvailableProducts,
+                userProducts: updatedUserProducts
             }
         case DELETE_PRODUCT:
             return {

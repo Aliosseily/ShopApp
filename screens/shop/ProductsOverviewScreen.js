@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { FlatList, Button, Platform, View, ActivityIndicator, StyleSheet } from 'react-native'
+import { FlatList, Button, Platform, View, ActivityIndicator, StyleSheet, Text } from 'react-native'
 import { useSelector, useDispatch } from 'react-redux'
 import ProductItem from '../../components/shop/ProductItem'
 import * as cartActions from '../../store/actions/cart'
@@ -36,6 +36,12 @@ const ProductsOverviewScreen = props => {
     if(isLoading){
         return <View style={styles.centered}>
         <ActivityIndicator size='large' color={Colors.primary}/>
+        </View>
+    }
+
+    if(!isLoading && Products.length === 0 ){
+        return <View style={styles.centered}>
+        <Text>No products found. Maybe start adding some!</Text>
         </View>
     }
 

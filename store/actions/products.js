@@ -8,21 +8,31 @@ export const SET_PRODUCTS = 'SET_PRODUCTS';
 
 export const fetchProducts = () => {
     return async dispatch => {
-        // fetch products data then dispatch , this done using thunk 
-        const response = await fetch('https://shopapp-803cc-default-rtdb.firebaseio.com/products.json')
-        const resData = await response.json();
-        let loadedProducts = [];
-        for(let key in resData){
-            loadedProducts.push(new Product(
-                key,
-                'u1',
-                resData[key].title,
-                resData[key].imageUrl,
-                resData[key].description,
-                resData[key].price,
-            ))
+        try {
+            // fetch products data then dispatch , this done using thunk 
+            const response = await fetch('https://shopapp-803cc-default-rtdb.firebaseio.com/products.json');
+
+            if (!response.ok){
+                throw new Error('Something went wrong!');
+            }
+
+            const resData = await response.json();
+            let loadedProducts = [];
+            for (let key in resData) {
+                loadedProducts.push(new Product(
+                    key,
+                    'u1',
+                    resData[key].title,
+                    resData[key].imageUrl,
+                    resData[key].description,
+                    resData[key].price,
+                ))
+            }
+            dispatch({ type: SET_PRODUCTS, products: loadedProducts });
+        } catch (err) {
+            // you can add you logic here in case if error
+            throw err;
         }
-        dispatch({ type: SET_PRODUCTS, products: loadedProducts });
     }
 }
 

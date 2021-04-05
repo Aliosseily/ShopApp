@@ -26,9 +26,15 @@ const ProductsOverviewScreen = props => {
 
     },[dispatch,setIsLoading,setError]);
 
+
+     useEffect(()=>{
+        const willFocusSub =  props.navigation.addListener('willFocus',loadProducts);
+        return()=>{
+            willFocusSub.remove(); // this will get rid of the subscription once this component is basically unmounted or whenever it will rerun 
+        }
+     },[loadProducts])
     // fire this whenever this component loads
     useEffect(() => {
-
         loadProducts();
     }, [dispatch,loadProducts])
 

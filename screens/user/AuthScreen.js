@@ -1,4 +1,4 @@
-import React, { useReducer, useCallback } from 'react'
+import React, { useState, useReducer, useCallback } from 'react'
 import { ScrollView, View, KeyboardAvoidingView, Button, StyleSheet } from 'react-native';
 import Input from '../../components/UI/Input'
 import Card from '../../components/UI/Card'
@@ -10,9 +10,9 @@ import * as authActions from '../../store/actions/auth'
 const FORM_INPUT_UPDATE = 'FORM_INPUT_UPDATE';
 
 const formReducer = (state, action) => {
-    console.log("action.input",action.input);
-    console.log("state.inputValues",state.inputValues);
-    console.log("action.value",action.value);
+    console.log("action.input", action.input);
+    console.log("state.inputValues", state.inputValues);
+    console.log("action.value", action.value);
     if (action.type === FORM_INPUT_UPDATE) {
         const updatedValues = {
             ...state.inputValues,
@@ -37,6 +37,8 @@ const formReducer = (state, action) => {
 
 const AuthScreen = () => {
 
+    const [isSignup, setIsSignup] = useState(false);
+
     // initialize states
     const [formState, dispatchFormState] = useReducer(formReducer, {
         inputValues: {
@@ -52,14 +54,24 @@ const AuthScreen = () => {
 
 
     const dispatch = useDispatch();
-    const signupHandler = () => {
-        dispatch(authActions.signup(formState.inputValues.email, formState.inputValues.password))
+
+    const authHandler = () => {
+        let action;
+
+        if (isSignup) {
+            action = authActions.signup(formState.inputValues.email, formState.inputValues.password)
+        }
+        else {
+            action = authActions.login(formState.inputValues.email, formState.inputValues.password)
+        }
+        dispatch(action);
     }
 
+
     const inputChangeHandler = useCallback((inputIdentifier, inputValid, inputValidity) => {
-        console.log("inputIdentifier",inputIdentifier)
-        console.log("inputValid",inputValid)
-        console.log("inputValidity",inputValidity)
+        console.log("inputIdentifier", inputIdentifier)
+        console.log("inputValid", inputValid)
+        console.log("inputValidity", inputValidity)
         dispatchFormState({
             type: FORM_INPUT_UPDATE,
             value: inputValid,
@@ -96,8 +108,19 @@ const AuthScreen = () => {
                             onInputChange={inputChangeHandler}
                             initialValue=''
                         />
-                        <View style={styles.buttonContainer}><Button title="Login" color={Colors.primary} onPress={signupHandler} /></View>
-                        <View style={styles.buttonContainer}><Button title="Switch to Sign Up" color={Colors.accent} onPress={() => { }} /></View>
+                        <View style={styles.buttonContainer}>
+                            <Button
+                                title={isSignup ? "Sign Up" : "Login"}
+                                color={Colors.primary}
+                                onPress={authHandler} />
+                        </View>
+                        <View style={styles.buttonContainer}>
+                            <Button
+                                title={`Switch to ${isSignup ? "Login" : "Sign Up"}`}
+                                color={Colors.accent}
+                                onPress={() => {
+                                    setIsSignup(prevState => !prevState)
+                                }} /></View>
                     </ScrollView>
                 </Card>
             </LinearGradient>

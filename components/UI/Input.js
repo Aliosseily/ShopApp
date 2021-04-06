@@ -66,7 +66,7 @@ const Input = props => {
         <View style={styles.formControl}>
             <Text style={styles.label}>{props.label}</Text>
             <TextInput
-                {...props}
+                {...props} // get all added props to input
                 style={styles.input}
                 // value={title}
                 value={inputState.value}

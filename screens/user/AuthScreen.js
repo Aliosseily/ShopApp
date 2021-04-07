@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useReducer, useCallback } from 'react'
-import { ScrollView, View, KeyboardAvoidingView, Button, ActivityIndicator, Alert, StyleSheet } from 'react-native';
+import { ScrollView, View, KeyboardAvoidingView, Button, ActivityIndicator, Alert, StyleSheet, ProgressViewIOSComponent } from 'react-native';
 import Input from '../../components/UI/Input'
 import Card from '../../components/UI/Card'
 import Colors from '../../constants/Colors';
@@ -36,7 +36,7 @@ const formReducer = (state, action) => {
 }
 
 
-const AuthScreen = () => {
+const AuthScreen = props => {
 
     const [isLodaing, setIsLodaing] = useState(false);
     const [isSignup, setIsSignup] = useState(false);
@@ -81,11 +81,13 @@ const AuthScreen = () => {
         setIsLodaing(true);
         try {
             await dispatch(action);
+            // if login success navigae to app
+            props.navigation.navigate("Shop")
         } catch (err) {
             setError(err.message)
             Alert.alert()
+            setIsLodaing(false);
         }
-        setIsLodaing(false);
     }
 
 

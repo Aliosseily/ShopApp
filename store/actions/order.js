@@ -34,9 +34,11 @@ export const  fetchOrder =  () => {
 }
 
 export const addOrder = (cartItems, totalAmount) => {
-    return async dispatch => {
-        const date = new Date();
-        const response = await fetch('https://shopapp-803cc-default-rtdb.firebaseio.com/orders/u1.json', {
+    // we can add another argument(getState) to get access to current state of our Redux store.
+    return async (dispatch, getState) => {
+        const token = getState().auth.token;       
+         const date = new Date();
+        const response = await fetch(`https://shopapp-803cc-default-rtdb.firebaseio.com/orders/u1.json?auth=${token}`, {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({//convert object to json

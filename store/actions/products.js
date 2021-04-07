@@ -39,14 +39,16 @@ export const fetchProducts = () => {
 
 
 export const deleteProduct = productId => {
-    return async dispatch => {
-        const response = await fetch(`https://shopapp-803cc-default-rtdb.firebaseio.com/products/${productId}.json`, {
+    // we can add another argument(getState) to get access to current state of our Redux store.
+    return async (dispatch, getState) => {
+        const token = getState().auth.token;
+        const response = await fetch(`https://shopapp-803cc-default-rtdb.firebaseio.com/products/${productId}.json?auth=${token}`, {
             method: 'DELETE',
         })
-        if(!response.ok){
+        if (!response.ok) {
             throw new Error('Something went wrong!')
         }
-    dispatch({ type: DELETE_PRODUCT, pid: productId });
+        dispatch({ type: DELETE_PRODUCT, pid: productId });
     }
 }
 // export const createProduct = (title, description, imageUrl, price)=>{
@@ -63,10 +65,12 @@ export const deleteProduct = productId => {
 
 
 export const createProduct = (title, description, imageUrl, price) => {
-    return async dispatch => {
+    // we can add another argument(getState) to get access to current state of our Redux store.
+    return async (dispatch, getState) => {
+        const token = getState().auth.token;
         // add any async code you want
         //firebase will add folder products.js
-        const response = await fetch('https://shopapp-803cc-default-rtdb.firebaseio.com/products.json', {
+        const response = await fetch(`https://shopapp-803cc-default-rtdb.firebaseio.com/products.json?auth=${token}`, {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({//convert object to json
@@ -77,7 +81,7 @@ export const createProduct = (title, description, imageUrl, price) => {
             })
         })
         const redData = await response.json();
-        return ({
+        dispatch({
             type: CREATE_PRODUCT,
             productData: {
                 id: redData.name,
@@ -91,8 +95,10 @@ export const createProduct = (title, description, imageUrl, price) => {
 }
 
 export const updateProduct = (id, title, description, imageUrl) => {
-    return async dispatch => {
-      const response =  await fetch(`https://shopapp-803cc-default-rtdb.firebaseio.com/products/${id}.json`, {
+    // we can add another argument(getState) to get access to current state of our Redux store.
+    return async (dispatch, getState) => {
+        const token = getState().auth.token;
+        const response = await fetch(`https://shopapp-803cc-default-rtdb.firebaseio.com/products/${id}.json?auth=${token}`, {
             //PUT : will fully override the resource with the new data.
             //PATCH : will update it in the places where you till it to update it
             method: 'PATCH',
@@ -103,7 +109,7 @@ export const updateProduct = (id, title, description, imageUrl) => {
                 imageUrl,
             })
         })
-        if(!response.ok){
+        if (!response.ok) {
             throw new Error('Something went wrong!')
         }
         dispatch({

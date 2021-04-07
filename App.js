@@ -8,13 +8,16 @@ import ShopNavigator from './navigation/ShopNavigator';
 import *  as Font from 'expo-font'
 import AppLoading from 'expo-app-loading';
 import ReduxThunk from 'redux-thunk'
+import authReducer from './store/reducers/auth';
 
 //import { composeWithDevTools } from 'redux-devtools-extension'; // use this only while development 
 
 const rootReducer = combineReducers({
   products: productsReducer,
   cart: cartReducer,
-  orders:ordersReducer
+  orders:ordersReducer,
+  auth:authReducer
+
 })
 const store = createStore(rootReducer , applyMiddleware(ReduxThunk));
 //const store = createStore(rootReducer,composeWithDevTools);

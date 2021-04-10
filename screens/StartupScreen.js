@@ -2,7 +2,7 @@ import React, { useEffect } from 'react';
 import { View, ActivityIndicator, StyleSheet, AsyncStorage } from 'react-native';
 import Colors from '../constants/Colors';
 import * as authActions from '../store/actions/auth'
-import {useDispatch} from 'react-redux';
+import { useDispatch } from 'react-redux';
 
 const StartupScreen = props => {
     const dispatch = useDispatch();
@@ -21,8 +21,12 @@ const StartupScreen = props => {
                 props.navigation.navigate("Auth");
                 return;
             }
+
+            //getTime() give timestamp in milliseconds
+            const expirationTime = expirationDate.getTime() - new Date().getTime();
+
             props.navigation.navigate("Shop");
-            dispatch(authActions.authenticate(userId,token))
+            dispatch(authActions.authenticate(userId, token, expirationTime))
         }
         tryLogin()
     }, [dispatch])

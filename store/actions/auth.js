@@ -4,8 +4,12 @@ import { AsyncStorage } from 'react-native';
 export const AUTHENTICATE = "AUTHENTICATE";
 export const LOGOUT = "LOGOUT";
 
-export const authenticate = (userId, token) => {
-    return { type: AUTHENTICATE, userId: userId, token: token }
+export const authenticate = (userId, token, expiryTime) => {
+    // return { type: AUTHENTICATE, userId: userId, token: token }
+    return dispatch => {
+        dispatch(setLogoutTimer(expiryTime));
+        dispatch({ type: AUTHENTICATE, userId: userId, token: token })
+    }
 }
 
 export const signup = (email, password) => {
@@ -38,7 +42,7 @@ export const signup = (email, password) => {
         const resData = await response.json();
         console.log(resData)
         // dispatch({ type: SIGNUP, token: resData.idToken, userId: resData.localId })
-        dispatch(authenticate(resData.localId, resData.idToken))
+        dispatch(authenticate(resData.localId, resData.idToken, parseInt(resData.expiresIn) * 1000))
         //getTime() get time in seconds 
         // *1000 convert it to milliseconds
         const expirationDate = new Date(new Date().getTime() + parseInt(resData.expiresIn) * 1000);
@@ -80,7 +84,7 @@ export const login = (email, password) => {
         const resData = await response.json();
         console.log(resData)
         // dispatch({ type: LOGIN, token: resData.idToken, userId: resData.localId })
-        dispatch(authenticate(resData.localId, resData.idToken))
+        dispatch(authenticate(resData.localId, resData.idToken, parseInt(resData.expiresIn) * 1000))
         //getTime() get time in seconds 
         // *1000 convert it to milliseconds
         const expirationDate = new Date(new Date().getTime() + parseInt(resData.expiresIn) * 1000);
@@ -89,7 +93,26 @@ export const login = (email, password) => {
 }
 
 export const logout = () => {
+    clearLogoutTimer();
+    AsyncStorage.removeItem('userData'); // clear AsyncStorage, remove data from our local storage 
     return { type: LOGOUT }
+}
+
+let timer;
+const clearLogoutTimer = (timer) => {
+    if (timer) {
+        clearTimeout(timer); //clearTimeout is a built-in javascript function to get red of that timer 
+
+    }
+}
+
+const setLogoutTimer = expirationTime => {
+    return dispatch => {// use thunk
+        timer = setTimeout(() => {
+            dispatch(logout())
+            // }, expirationTime / 1000);
+        }, expirationTime);
+    }
 }
 
 

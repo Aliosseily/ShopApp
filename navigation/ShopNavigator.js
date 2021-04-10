@@ -8,7 +8,8 @@ import CartScreen from '../screens/shop/CartScreen';
 import OrdersScreen from '../screens/shop/OrdersScreen';
 import AuthScreen from '../screens/user/AuthScreen';
 import UserProductScreen from '../screens/user/UserProductsScreen'
-import EditProductScreen from '../screens/user/EditProductScreen'
+import EditProductScreen from '../screens/user/EditProductScreen';
+import StartupScreen from '../screens/StartupScreen';
 //https://www.npmjs.com/package/react-navigation-drawer
 import { createDrawerNavigator } from 'react-navigation-drawer';
 import Colors from '../constants/Colors';
@@ -88,6 +89,7 @@ const AuthNavigtor = createStackNavigator(
 )
 
 const MainNavigator = createSwitchNavigator({
+    Startup:StartupScreen,
     Auth: AuthNavigtor,
     Shop: ShopNavigator
 })

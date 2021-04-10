@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useReducer, useCallback } from 'react'
-import { ScrollView, View, KeyboardAvoidingView, Button, ActivityIndicator, Alert, StyleSheet, ProgressViewIOSComponent } from 'react-native';
+import { ScrollView, View, KeyboardAvoidingView, Button, ActivityIndicator, Alert, StyleSheet } from 'react-native';
 import Input from '../../components/UI/Input'
 import Card from '../../components/UI/Card'
 import Colors from '../../constants/Colors';

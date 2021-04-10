@@ -3,11 +3,13 @@ import Order from "../../models/order";
 export const ADD_ORDER = 'ADD_ORDER';
 export const SET_ORDERS = 'SET_ORDERS';
 
-export const  fetchOrder =  () => {
-    return async dispatch => {
+export const fetchOrder = () => {
+    return async (dispatch, getState) => {
+        const userId = getState().auth.userId;//get user Id of currentlly loggedin user 
+
         try {
             // fetch products data then dispatch , this done using thunk 
-            const response = await fetch('https://shopapp-803cc-default-rtdb.firebaseio.com/orders/u1.json');
+            const response = await fetch(`https://shopapp-803cc-default-rtdb.firebaseio.com/orders/${userId}.json`);
 
             if (!response.ok) {
                 throw new Error('Something went wrong!');
@@ -36,9 +38,10 @@ export const  fetchOrder =  () => {
 export const addOrder = (cartItems, totalAmount) => {
     // we can add another argument(getState) to get access to current state of our Redux store.
     return async (dispatch, getState) => {
-        const token = getState().auth.token;       
-         const date = new Date();
-        const response = await fetch(`https://shopapp-803cc-default-rtdb.firebaseio.com/orders/u1.json?auth=${token}`, {
+        const token = getState().auth.token;//get user token       
+        const userId = getState().auth.userId;//get user Id of currentlly logedin user 
+        const date = new Date();
+        const response = await fetch(`https://shopapp-803cc-default-rtdb.firebaseio.com/orders/${userId}.json?auth=${token}`, {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({//convert object to json

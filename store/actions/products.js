@@ -7,7 +7,11 @@ export const SET_PRODUCTS = 'SET_PRODUCTS';
 
 
 export const fetchProducts = () => {
-    return async dispatch => {
+    return async (dispatch,getState) => {
+        console.log(getState())
+        const userId = getState().auth.userId;//get user Id of currentlly loggedin user 
+        console.log("111userId",userId)
+
         try {
             // fetch products data then dispatch , this done using thunk 
             const response = await fetch('https://shopapp-803cc-default-rtdb.firebaseio.com/products.json');
@@ -17,18 +21,25 @@ export const fetchProducts = () => {
             }
 
             const resData = await response.json();
+            console.log("resData",resData)
             let loadedProducts = [];
             for (let key in resData) {
                 loadedProducts.push(new Product(
                     key,
-                    'u1',
+                    //'u1',
+                    resData[key].ownerId,
                     resData[key].title,
                     resData[key].imageUrl,
                     resData[key].description,
                     resData[key].price,
                 ))
             }
-            dispatch({ type: SET_PRODUCTS, products: loadedProducts });
+            console.log("userId",userId)
+            console.log("loadedProducts",loadedProducts)
+            dispatch({ 
+                type: SET_PRODUCTS, 
+                products: loadedProducts, 
+                userProducts: loadedProducts.filter(prod => prod.ownerId === userId) });
         } catch (err) {
             // you can add you logic here in case if error
             throw err;
@@ -68,6 +79,7 @@ export const createProduct = (title, description, imageUrl, price) => {
     // we can add another argument(getState) to get access to current state of our Redux store.
     return async (dispatch, getState) => {
         const token = getState().auth.token;
+        const userId = getState().auth.userId;//get user Id of currentlly loggedin user 
         // add any async code you want
         //firebase will add folder products.js
         const response = await fetch(`https://shopapp-803cc-default-rtdb.firebaseio.com/products.json?auth=${token}`, {
@@ -77,7 +89,8 @@ export const createProduct = (title, description, imageUrl, price) => {
                 title,
                 description,
                 imageUrl,
-                price
+                price,
+                ownerId:userId
             })
         })
         const redData = await response.json();
@@ -88,7 +101,8 @@ export const createProduct = (title, description, imageUrl, price) => {
                 title,
                 description,
                 imageUrl,
-                price
+                price,
+                ownerId:userId
             }
         });
     }

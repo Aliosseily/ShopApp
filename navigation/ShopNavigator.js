@@ -1,7 +1,7 @@
 import React from 'react'
 import { createStackNavigator } from 'react-navigation-stack';
-import { createAppContainer, createSwitchNavigator } from "react-navigation";
-import { Platform } from 'react-native';
+import { createAppContainer, createSwitchNavigator, DrawerItems } from "react-navigation";
+import { Platform, SafeAreaView, Button, View } from 'react-native';
 import ProductsOverviewScreen from '../screens/shop/ProductsOverviewScreen';
 import ProductDetailScreen from '../screens/shop/ProductDetailScreen';
 import CartScreen from '../screens/shop/CartScreen';
@@ -14,6 +14,8 @@ import StartupScreen from '../screens/StartupScreen';
 import { createDrawerNavigator } from 'react-navigation-drawer';
 import Colors from '../constants/Colors';
 import { Ionicons } from '@expo/vector-icons';
+import { useDispatch } from 'react-redux';
+import * as authActions from '../store/actions/auth'
 const defaultNavoptions = {
     headerStyle: {
         backgroundColor: Platform.OS === 'android' ? Colors.primary : ''
@@ -76,6 +78,25 @@ const ShopNavigator = createDrawerNavigator({
 }, {
     contentOptions: {
         activeTintColor: Colors.primary
+    },
+    // this allow u to add your own content for the side drawer instead of the default content
+    contentComponent: props => {
+        const dispatch = useDispatch();
+        return (<View style={{ flex: 1, paddingTop: 30 }}>
+            {/* tjis control how this layed out*/}
+            <SafeAreaView forceInset={{ top: 'always', horizontal: 'never' }}>
+                <DrawerItems {...props} />
+                <Button
+                    title="Logout"
+                    color={Colors.primary}
+                    onPress={() => {
+                        dispatch(authActions.logout())
+                        props.navigation.navigate('Auth')
+                    }} />
+                    
+            </SafeAreaView>
+        </View>
+        )
     }
 })
 
@@ -89,7 +110,7 @@ const AuthNavigtor = createStackNavigator(
 )
 
 const MainNavigator = createSwitchNavigator({
-    Startup:StartupScreen,
+    Startup: StartupScreen,
     Auth: AuthNavigtor,
     Shop: ShopNavigator
 })
